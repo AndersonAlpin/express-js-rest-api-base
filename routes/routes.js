@@ -1,8 +1,18 @@
-var express = require("express")
-var app = express();
-var router = express.Router();
-var HomeController = require("../controllers/HomeController");
+let express = require("express")
+let app = express();
+let router = express.Router();
+let HomeController = require("../controllers/HomeController");
+let UserController = require('../controllers/UserController');
+const User = require("../models/User");
 
+//HOME
 router.get('/', HomeController.index);
+
+//USERS
+router.get('/user', UserController.index);
+router.get('/user/:id', UserController.findUser);
+router.post('/user', UserController.create);
+router.put('/user', UserController.edit);
+router.delete('/user/:id', UserController.remove);
 
 module.exports = router;
