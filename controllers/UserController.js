@@ -1,4 +1,6 @@
-let User = require('../models/User');
+const User = require('../models/User');
+const PasswordToken = require('../models/PasswordToken');
+
 
 class UserController {
 
@@ -69,6 +71,18 @@ class UserController {
 
         if(result.status){
             res.status(200).send("Tudo OK");
+        }else{
+            res.status(406).send(result.error);
+        }
+    }
+
+    async recoverPassword(req, res){
+        let email = req.body.email;
+
+        let result = await PasswordToken.create(email);
+
+        if(result.status){
+            res.status(200).send(result.token);
         }else{
             res.status(406).send(result.error);
         }

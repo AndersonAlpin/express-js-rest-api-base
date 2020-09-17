@@ -15,7 +15,7 @@ class User {
 
     async findById(id) {
         try {
-            let result = await knex.select(['id', 'name', 'email', 'role']).where({ id: id }).table("users");
+            let result = await knex.select(['id', 'name', 'email', 'role']).where({ id}).table("users");
 
             if (result.length > 0) {
                 return result[0];
@@ -29,6 +29,22 @@ class User {
         }
     }
 
+    async findByEmail(email) {
+        try {
+            let result = await knex.select("*").from("users").where({ email });
+
+            if (result.length > 0) {
+                return result[0];
+            } else {
+                return undefined;
+            }
+
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    }
+
     async new(email, password, name) {
 
         try {
@@ -38,22 +54,6 @@ class User {
             console.log(error);
         }
 
-    }
-
-    async findEmail(email) {
-        try {
-            let result = await knex.select("*").from("users").where({ email: email });
-
-            if (result.length > 0) {
-                return true;
-            } else {
-                return false;
-            }
-
-        } catch (error) {
-            console.log(error);
-            return false;
-        }
     }
 
     async update(id, name, email, role) {
