@@ -11,7 +11,7 @@ class PasswordToken {
 
             try {
                 let token = v4();
-            
+
                 await knex.insert({
                     user_id: user.id,
                     used: 0,
@@ -26,6 +26,36 @@ class PasswordToken {
         } else {
             return { status: false, error: "O e-mail informado não existe." }
         }
+    }
+
+    async validate(token) {
+
+
+        try {
+            let result = await knex.select().where({ token }).table("password_tokens");
+
+            if (result.length > 0) {
+                let tk = result[0];
+
+                if (tk.used) {
+                    return { status: false };
+                } else {
+                    return { status: true, token: tk };
+                }
+
+            } else {
+                return { status: false };
+            }
+
+        } catch (error) {
+            return { status: false };
+            console.log(error);
+        }
+
+    }
+
+    async setUsed(token){
+        await knex.update({ used: 1}).where({ token }).table("password_tokens");
     }
 
 }
